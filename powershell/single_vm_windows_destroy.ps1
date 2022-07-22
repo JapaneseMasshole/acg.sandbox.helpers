@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 $rg=Get-AzResourceGroup
 
 $nsg = Get-AzNetworkSecurityGroup
