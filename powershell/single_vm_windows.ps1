@@ -1,5 +1,5 @@
 $rg=Get-AzResourceGroup
-$nsg="nsg1"
+$nsgname="nsg1"
 $nic="nic1"
 $vnetname="vnet1"
 $subnetname="subnet1"
@@ -14,4 +14,4 @@ echo "default location is " $rg.Location
 #Creating resources
 
 echo "Creating Network Security Group " $nsg
-New-AzNetworkSecurityGroup -Name $nsg -ResourceGroupName $rg.ResourceGroupName  -Location  $rg.Location
+$nsg = New-AzNetworkSecurityGroup -Name $nsgname -ResourceGroupName $rg.ResourceGroupName  -Location  $rg.Location
