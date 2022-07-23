@@ -20,7 +20,7 @@ $vnet = Get-AzVirtualNetwork -ResourceGroupName $rg.ResourceGroupName
 $nsg = Get-AzNetworkSecurityGroup -ResourceGroupName $rg.ResourceGroupName
 
 echo "Disassociate subnet from NSG..."
-Set-AzVirtualNetworkSubnetConfig -Name $vnet.subnets[0].Name -VirtualNetwork $vnet --NetworkSecurityGroupId $null
+Set-AzVirtualNetworkSubnetConfig -Name $vnet.subnets[0].Name -VirtualNetwork $vnet -AddressPrefix $vnet.subnets[0].AddressPrefix -NetworkSecurityGroupId $null
 $vnet | Set-AzVirtualNetwork
 
 echo "Deleting network security group '$($nsg.Name)'"
