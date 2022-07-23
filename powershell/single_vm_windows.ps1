@@ -76,9 +76,9 @@ $psCred = New-Object System.Management.Automation.PSCredential($UserName, $Passw
 $Vnet = (Get-AzVirtualNetwork -ResourceGroup $rg.ResourceGroupName)
 $NIC = New-AzNetworkInterface -Name $nicname -ResourceGroupName $rg.ResourceGroupName -Location $virtualNetwork.Location -SubnetId $Vnet.Subnets[0].Id -PublicIpAddressId $pubip.Id
 $VirtualMachine = New-AzVMConfig -VMName $vmname -VMSize $sizename
-$VirtualMachine = Set-AzVMOperatingSystem -VM $VirtualMachine -Windows -ComputerName $vmname -ProvisionVMAgent -EnableAutoUpdate
+$VirtualMachine = Set-AzVMOperatingSystem -VM $VirtualMachine -Windows -ComputerName "myazurevm" #-ProvisionVMAgent -EnableAutoUpdate
 $VirtualMachine = Add-AzVMNetworkInterface -VM $VirtualMachine -Id $NIC.Id
 $VirtualMachine = Set-AzVMBootDiagnostic -VM $VirtualMachine -Disable
-$VirtualMachine = Set-AzVMSourceImage -VM $VirtualMachine -PublisherName 'MicrosoftWindowsServer' -Offer 'WindowsServer' -Skus '2022-datacenter-azure-edition-core' -Version latest
+$VirtualMachine = Set-AzVMSourceImage -VM $VirtualMachine -PublisherName 'MicrosoftWindowsServer' -Offer 'WindowsServer' -Skus "2022-datacenter-g2" -Version "latest"
 New-AzVm -ResourceGroupName $rg.ResourceGroupName -Location $virtualNetwork.Location -VM $VirtualMachine
 echo "Deployment completed."
