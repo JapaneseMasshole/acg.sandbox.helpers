@@ -4,3 +4,12 @@ terraform/.terraform.lock.hcl
 terraform/main.tfplan
 terraform/terraform.tfstate
 terraform/terraform.tfstate.backup
+terraform/single_vm_windows/.terraform.lock.hcl
+terraform/single_vm_windows/.terraform/providers/registry.terraform.io/hashicorp/azurerm/2.11.0/darwin_amd64/terraform-provider-azurerm_v2.11.0_x5
+terraform/single_vm_windows/.terraform/providers/registry.terraform.io/hashicorp/azurerm/2.92.0/darwin_amd64/terraform-provider-azurerm_v2.92.0_x5
+terraform/single_vm_windows/.terraform/providers/registry.terraform.io/hashicorp/azurerm/2.99.0/darwin_amd64/terraform-provider-azurerm_v2.99.0_x5
+terraform/single_vm_windows/terraform.tfstate
+terraform/single_vm_windows/terraform.tfstate.backup
+terraform/single_vm_windows/main.tfplan
+terraform/single_vm_windows/main.tfplan
+terraform/single_vm_windows/main.tfplan

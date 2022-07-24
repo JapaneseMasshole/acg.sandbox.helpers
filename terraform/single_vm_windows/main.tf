@@ -1,11 +1,11 @@
 terraform {
 
-  required_version = ">=0.12"
+  #required_version = ">=0.12"
   
   required_providers {
     azurerm = {
       source = "hashicorp/azurerm"
-      version = "~>2.0"
+      version = "2.92.0"
     }
   }
 }
@@ -16,11 +16,15 @@ provider "azurerm" {
 }
 
 data "azurerm_resource_group" "rg" {
-  name = var.resource_group_name
+    name = var.resource_group_name
+}
+
+data "azurerm_resources" "rootStorageAcct"{
+  resource_group_name = data.azurerm_resource_group.rg.name
 }
 
 data "azurerm_storage_account" "storageacct" {
-    name = var.storage_account_name
+    name = data.azurerm_resources.rootStorageAcct.resources[0].name
     resource_group_name = data.azurerm_resource_group.rg.name
 }
 
@@ -34,13 +38,6 @@ resource "azurerm_virtual_network" "vnet" {
 resource "azurerm_subnet" "subnet01" {
     name = "subnet01"
     address_prefixes = ["10.0.1.0/24"]
-    virtual_network_name = azurerm_virtual_network.vnet.name
-    resource_group_name = data.azurerm_resource_group.rg.name
-}
-
-resource "azurerm_subnet" "subnet02" {
-    name = "subnet02"
-    address_prefixes = ["10.0.2.0/24"]
     virtual_network_name = azurerm_virtual_network.vnet.name
     resource_group_name = data.azurerm_resource_group.rg.name
 }
