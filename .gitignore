@@ -13,3 +13,4 @@ terraform/single_vm_windows/terraform.tfstate.backup
 terraform/single_vm_windows/main.tfplan
 terraform/single_vm_windows/main.tfplan
 terraform/single_vm_windows/main.tfplan
+terraform/single_vm_windows/main.tfplan
