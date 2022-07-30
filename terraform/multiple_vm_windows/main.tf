@@ -65,15 +65,16 @@ resource "azurerm_subnet_network_security_group_association" "subnet_nsg" {
   network_security_group_id = azurerm_network_security_group.nsg.id
 }
 
-/*
-resource "azurerm_public_ip" "pubip" {
-    name = "pubip"
+
+resource "azurerm_public_ip" "pubips" {
+    count = var.instance_count
+    name = "pubip${count.index+1}"
     location = data.azurerm_resource_group.rg.location
     resource_group_name = data.azurerm_resource_group.rg.name
     allocation_method = "Static"
     sku = "Standard"
     availability_zone   = "No-Zone"
-}*/
+}
 
 resource "azurerm_network_interface" "nics" {
     count = var.instance_count
@@ -82,9 +83,9 @@ resource "azurerm_network_interface" "nics" {
     resource_group_name = data.azurerm_resource_group.rg.name
     ip_configuration {
       name = "ipconfig${count.index+1}"
-      subnet_id = azurerm_subnet.subnets[(count.index % var.subnet_count)].id
+      subnet_id = azurerm_subnet.subnets[(count.index % var.instance_count)].id
       private_ip_address_allocation = "Dynamic"
-      #public_ip_address_id = azurerm_public_ip.pubip.id
+      public_ip_address_id = azurerm_public_ip.pubips[(count.index % var.instance_count)].id
     }
 }
 
