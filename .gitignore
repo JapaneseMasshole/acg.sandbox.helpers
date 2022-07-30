@@ -16,3 +16,6 @@ terraform/single_vm_windows/main.tfplan
 terraform/single_vm_windows/main.tfplan
 terraform/single_vm_windows/main.tfplan
 *.tfplan
+*.tfstate
+terraform/multiple_vm_windows/.terraform.lock.hcl
+terraform/multiple_vm_windows/.terraform/
