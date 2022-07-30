@@ -83,7 +83,7 @@ resource "azurerm_network_interface" "nics" {
     resource_group_name = data.azurerm_resource_group.rg.name
     ip_configuration {
       name = "ipconfig${count.index+1}"
-      subnet_id = azurerm_subnet.subnets[(count.index % var.instance_count)].id
+      subnet_id = azurerm_subnet.subnets[(count.index % var.subnet_count)].id
       private_ip_address_allocation = "Dynamic"
       public_ip_address_id = azurerm_public_ip.pubips[(count.index % var.instance_count)].id
     }
