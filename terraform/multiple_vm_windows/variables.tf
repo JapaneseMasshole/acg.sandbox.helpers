@@ -1,6 +1,6 @@
 variable "resource_group_name" {
   type       = string
-  default = "1-08d7e6e2-playground-sandbox"
+  default = ""
   description   = "Name of the existing resource group"
 }
 variable "network_address_space" {
@@ -15,8 +15,3 @@ variable "subnet_count" {
   type = number
   default = 2
 }
-/*
-variable "storage_account_name"{
-  type = string
-  description = "Name of the existing storage account name in the sandbox"
-}*/
