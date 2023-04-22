@@ -20,6 +20,7 @@ data "azurerm_resource_group" "rg" {
 }
 
 data "azurerm_resources" "rootStorageAcct"{
+  type = "Microsoft.Storage/storageAccounts"
   resource_group_name = data.azurerm_resource_group.rg.name
 }
 
