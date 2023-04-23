@@ -5,7 +5,7 @@ terraform {
   required_providers {
     azurerm = {
       source = "hashicorp/azurerm"
-      version = "2.92.0"
+      version = "3.51.0"
     }
   }
 }
@@ -73,45 +73,41 @@ resource "azurerm_public_ip" "pubip" {
     availability_zone   = "No-Zone"
 }
 
-resource "azurerm_app_service_plan" "example" {
+resource "azurerm_service_plan" "example" {
   name                = "example-app-service-plan"
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
-  kind                = "FunctionApp"
-  sku {
-    tier = "Premium"
-    size = "P1v2"
-  }
+  location            = data.azurerm_resource_group.rg.location
+  resource_group_name = data.azurerm_resource_group.rg.name
+  os_type = "Linux"
+  sku_name = "P1v2"
 }
 
-resource "azurerm_function_app" "example" {
+resource "azurerm_linux_function_app" "example" {
   name                      = "example-function-app"
-  location                  = azurerm_resource_group.example.location
-  resource_group_name       = azurerm_resource_group.example.name
-  app_service_plan_id       = azurerm_app_service_plan.example.id
-  storage_connection_string = azurerm_storage_account.example.primary_connection_string
-  os_type                   = "Linux"
-  runtime_stack             = "PYTHON|3.9"
-
+  location                  = data.azurerm_resource_group.rg.location
+  resource_group_name       = data.azurerm_resource_group.rg.name
+  service_plan_id       = azurerm_service_plan.example.id
+  
+  
+  app_settings = {
+    "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING" = data.azurerm_storage_account.storageacct.primary_connection_string
+    "WEBSITE_CONTENTSHARE"                     = data.azurerm_storage_account.storageacct.name
+  }
   site_config {
-    app_settings = {
-      "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING" = azurerm_storage_account.example.primary_connection_string
-      "WEBSITE_CONTENTSHARE"                     = azurerm_storage_account.example.name
+    always_on = false
+    application_stack {
+      python_version             = "3.9"
     }
   }
-
   identity {
     type = "SystemAssigned"
   }
 
   depends_on = [
-    azurerm_subnet.example,
+    azurerm_subnet.subnet01,
   ]
 }
 
 resource "azurerm_app_service_virtual_network_swift_connection" "example" {
-  name                = "example-vnet-connection"
-  resource_group_name = azurerm_resource_group.example.name
-  app_service_name    = azurerm_function_app.example.name
-  subnet_id            = azurerm_subnet.example.id
+  app_service_id       = azurerm_service_plan.example.id
+  subnet_id            = azurerm_subnet.subnet01.id
 }
