@@ -72,3 +72,46 @@ resource "azurerm_public_ip" "pubip" {
     sku = "Standard"
     availability_zone   = "No-Zone"
 }
+
+resource "azurerm_app_service_plan" "example" {
+  name                = "example-app-service-plan"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
+  kind                = "FunctionApp"
+  sku {
+    tier = "Premium"
+    size = "P1v2"
+  }
+}
+
+resource "azurerm_function_app" "example" {
+  name                      = "example-function-app"
+  location                  = azurerm_resource_group.example.location
+  resource_group_name       = azurerm_resource_group.example.name
+  app_service_plan_id       = azurerm_app_service_plan.example.id
+  storage_connection_string = azurerm_storage_account.example.primary_connection_string
+  os_type                   = "Linux"
+  runtime_stack             = "PYTHON|3.9"
+
+  site_config {
+    app_settings = {
+      "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING" = azurerm_storage_account.example.primary_connection_string
+      "WEBSITE_CONTENTSHARE"                     = azurerm_storage_account.example.name
+    }
+  }
+
+  identity {
+    type = "SystemAssigned"
+  }
+
+  depends_on = [
+    azurerm_subnet.example,
+  ]
+}
+
+resource "azurerm_app_service_virtual_network_swift_connection" "example" {
+  name                = "example-vnet-connection"
+  resource_group_name = azurerm_resource_group.example.name
+  app_service_name    = azurerm_function_app.example.name
+  subnet_id            = azurerm_subnet.example.id
+}
