@@ -41,6 +41,14 @@ resource "azurerm_subnet" "subnet01" {
     address_prefixes = ["10.0.1.0/24"]
     virtual_network_name = azurerm_virtual_network.vnet.name
     resource_group_name = data.azurerm_resource_group.rg.name
+
+    delegation {
+      name = "delegationName"
+      service_delegation {
+        name    = "Microsoft.Web/serverFarms"
+        actions = ["Microsoft.Network/virtualNetworks/subnets/action"]
+      }
+    }
 }
 
 resource "azurerm_network_security_group" "nsg" {
@@ -70,7 +78,7 @@ resource "azurerm_public_ip" "pubip" {
     resource_group_name = data.azurerm_resource_group.rg.name
     allocation_method = "Static"
     sku = "Standard"
-    availability_zone   = "No-Zone"
+    #availability_zone   = "No-Zone"
 }
 
 resource "azurerm_service_plan" "example" {
@@ -82,10 +90,11 @@ resource "azurerm_service_plan" "example" {
 }
 
 resource "azurerm_linux_function_app" "example" {
-  name                      = "example-function-app"
+  name                      = "mtk-example-function-app"
   location                  = data.azurerm_resource_group.rg.location
   resource_group_name       = data.azurerm_resource_group.rg.name
   service_plan_id       = azurerm_service_plan.example.id
+  storage_account_name = data.azurerm_storage_account.storageacct.name
   
   
   app_settings = {
@@ -108,6 +117,6 @@ resource "azurerm_linux_function_app" "example" {
 }
 
 resource "azurerm_app_service_virtual_network_swift_connection" "example" {
-  app_service_id       = azurerm_service_plan.example.id
+  app_service_id       = azurerm_linux_function_app.example.id
   subnet_id            = azurerm_subnet.subnet01.id
 }
