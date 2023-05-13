@@ -51,6 +51,7 @@ resource "azurerm_subnet" "subnet01" {
     }
 }
 
+/*
 resource "azurerm_network_security_group" "nsg" {
         name = "NSG01"
         location = data.azurerm_resource_group.rg.location
@@ -70,7 +71,7 @@ resource "azurerm_network_security_group" "nsg" {
 resource "azurerm_subnet_network_security_group_association" "subnet_nsg" {
   subnet_id                 = azurerm_subnet.subnet01.id
   network_security_group_id = azurerm_network_security_group.nsg.id
-}
+}*/
 
 resource "azurerm_public_ip" "pubip" {
     name = "pubip"
@@ -78,8 +79,38 @@ resource "azurerm_public_ip" "pubip" {
     resource_group_name = data.azurerm_resource_group.rg.name
     allocation_method = "Static"
     sku = "Standard"
-    #availability_zone   = "No-Zone"
+    
 }
+
+
+resource "azurerm_public_ip_prefix" "example" {
+  name                = "nat-gateway-publicIPPrefix"
+  location            = data.azurerm_resource_group.rg.location
+  resource_group_name = data.azurerm_resource_group.rg.name
+  prefix_length       = 30
+
+}
+
+resource "azurerm_nat_gateway" "example" {
+  name                    = "nat-Gateway"
+  location                = data.azurerm_resource_group.rg.location
+  resource_group_name     = data.azurerm_resource_group.rg.name
+  sku_name                = "Standard"
+  idle_timeout_in_minutes = 10
+}
+
+resource "azurerm_nat_gateway_public_ip_association" "example" {
+  nat_gateway_id       = azurerm_nat_gateway.example.id
+  public_ip_address_id = azurerm_public_ip.pubip.id
+}
+
+resource "azurerm_subnet_nat_gateway_association" "example" {
+  subnet_id      = azurerm_subnet.subnet01.id
+  nat_gateway_id = azurerm_nat_gateway.example.id
+}
+
+
+
 
 resource "azurerm_service_plan" "example" {
   name                = "example-app-service-plan"
