@@ -23,3 +23,4 @@ terraform/multiple_vm_windows/terraform.tfstate.backup
 *.backup
 terraform/azfunc_with_vnet/.terraform/providers/registry.terraform.io/hashicorp/azurerm/3.51.0/darwin_amd64/terraform-provider-azurerm_v3.51.0_x5
 .terraform.lock.hcl
+terraform/azfunc_with_vnet/main.tf
