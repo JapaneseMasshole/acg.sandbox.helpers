@@ -88,29 +88,6 @@ resource "azurerm_subnet" "subnet01" {
     }
 }
 
-
-/*
-resource "azurerm_network_security_group" "nsg" {
-        name = "NSG01"
-        location = data.azurerm_resource_group.rg.location
-        resource_group_name = data.azurerm_resource_group.rg.name
-        security_rule {
-          name                       = "RDP"
-          priority                   = 200
-          direction                  = "Inbound"
-          access                     = "Allow"
-          protocol                   = "Tcp"
-          source_port_range          = "*"
-          destination_port_range     = "3389"
-          source_address_prefix      = "*"
-          destination_address_prefix = "*"
-        }
-}
-resource "azurerm_subnet_network_security_group_association" "subnet_nsg" {
-  subnet_id                 = azurerm_subnet.subnet01.id
-  network_security_group_id = azurerm_network_security_group.nsg.id
-}*/
-
 resource "azurerm_public_ip" "pubip" {
     name = "pubip"
     location = data.azurerm_resource_group.rg.location
@@ -119,7 +96,6 @@ resource "azurerm_public_ip" "pubip" {
     sku = "Standard"
     
 }
-
 
 resource "azurerm_public_ip_prefix" "example" {
   name                = "nat-gateway-publicIPPrefix"
@@ -146,9 +122,6 @@ resource "azurerm_subnet_nat_gateway_association" "example" {
   subnet_id      = azurerm_subnet.subnet01.id
   nat_gateway_id = azurerm_nat_gateway.example.id
 }
-
-
-
 
 resource "azurerm_service_plan" "example" {
   name                = "example-app-service-plan"
